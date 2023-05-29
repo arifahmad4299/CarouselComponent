@@ -7,6 +7,7 @@ import {
   View,
   Text,
   Pressable,
+  TouchableOpacity,
 } from 'react-native';
 import React, { useState } from 'react';
 import Glyphs from '../config/Glyphs';
@@ -31,6 +32,7 @@ const CarouselScreen: React.FC<CarouselScreenProps> = props => {
         <ScrollView
           horizontal
           pagingEnabled
+          style={styles.imageView}
           showsHorizontalScrollIndicator={false}
           onMomentumScrollEnd={(event) => {
             const scrollOffset = event.nativeEvent.contentOffset.x;
@@ -52,6 +54,17 @@ const CarouselScreen: React.FC<CarouselScreenProps> = props => {
       </ScrollView>
     </View>
       <CarouselSlider data={data} currentIndex={props?.currentIndex} isImageDetail={false} />
+      <View style={styles.detailsContainer}>
+        <Text style={styles.title}>Bose Noise Cancelling 700 Bluetooth</Text>
+        <Text style={styles.price}>$99.99</Text>
+        <Text style={styles.descriptionText}>Description</Text>
+        <Text style={styles.description}>
+          {`Keep your phone in your pocket and your head up to the world with easy access to voice assistants for music, navigation, weather and more confidently take a call or speak to Alexa in any environment.\nA with an unrivalled adaptive four-microphone system that isolates your voice from surrounding noise.\nOptimized for Amazon Alexa and the Google Assistant. \n`}
+        </Text>
+        <TouchableOpacity style={styles.addButton}>
+          <Text style={styles.addButtonLabel}>Add to Cart</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };

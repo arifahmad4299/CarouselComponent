@@ -28,6 +28,18 @@ export const styles = StyleSheet.create({
       left: 0,
       right: 0,
     },  
+    resetButton: {
+      position: 'absolute',
+      bottom: 16,
+      left: 16,
+      backgroundColor: 'rgba(0, 0, 0, 0.6)',
+      padding: 8,
+      borderRadius: 8,
+    },
+    resetButtonText: {
+      color: 'white',
+      fontWeight: 'bold',
+    },
     container: {
       flex: 1,
       justifyContent: 'center',

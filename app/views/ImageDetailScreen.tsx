@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { View, SafeAreaView, ScrollView, PanResponder, Pressable } from 'react-native';
+import { View, SafeAreaView, PanResponder } from 'react-native';
 import { CloseButton } from '../common/CloseButton';
 import { styles } from './styles/ImageDetailScreenStyle';
 import { CarouselSlider } from '../common/CarouselSlider';
@@ -20,7 +20,6 @@ const ImageDetailScreen: React.FC<ImageDetailProps> = props => {
   const [scale, setScale] = useState(1);
   const [translateX, setTranslateX] = useState(0);
   const [translateY, setTranslateY] = useState(0);
-  const [previousDistance, setPreviousDistance] = useState(0);
 
   const imageRef = useRef();
 
@@ -28,25 +27,13 @@ const ImageDetailScreen: React.FC<ImageDetailProps> = props => {
     onStartShouldSetPanResponder: () => true,
     onMoveShouldSetPanResponder: () => true,
     onPanResponderMove: (event, gesture) => {
-      const { dx, dy, pinch, previousPinch } = gesture;
-
-      if (pinch && previousPinch) {
-        const distance = calculateDistance(
-          pinch,
-          previousPinch
-        );
-        const newScale = scale * (distance / previousDistance);
-        setScale(newScale);
-      } else {
-        setTranslateX(translateX + dx);
-        setTranslateY(translateY + dy);
-      }
-    },
-    onPanResponderRelease: () => {
-      setPreviousDistance(0);
-    },
-    onPanResponderTerminate: () => {
-      setPreviousDistance(0);
+      const { dx, dy } = gesture;      
+        if((translateX + dx) <= 0 && (translateX + dx) >= -390 && scale > 1) {
+          if((translateY + dy) >= -500 && (translateY + dy) <= -380) {
+            setTranslateX(translateX + dx);
+            setTranslateY(translateY + dy);
+          }
+        }
     },
   });
 
@@ -59,19 +46,11 @@ const ImageDetailScreen: React.FC<ImageDetailProps> = props => {
     const tapY = imageHeight / 2;
 
     // Calculate the translation values based on the double tap position
-    const imageRefWidth = imageWidth * newScale;
-    const imageRefHeight = imageHeight * newScale;
     const newTranslateX = tapX - (tapX / scale) * newScale;
     const newTranslateY = tapY - (tapY / scale) * newScale;
 
-    setTranslateX(newTranslateX);
-    setTranslateY(newTranslateY);
-  };
-
-  const calculateDistance = (pinch, previousPinch) => {
-    const dx = pinch.x - previousPinch.x;
-    const dy = pinch.y - previousPinch.y;
-    return Math.sqrt(dx * dx + dy * dy);
+    setTranslateX(scale === 1 ? newTranslateX : 0);
+    setTranslateY(scale === 1 ? newTranslateY : 0);
   };
 
   const transformStyle = {
