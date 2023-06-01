@@ -1,10 +1,10 @@
-import React, { useRef, useState } from 'react';
-import { View, SafeAreaView, PanResponder } from 'react-native';
-import { CloseButton } from '../common/CloseButton';
-import { styles } from './styles/ImageDetailScreenStyle';
-import { CarouselSlider } from '../common/CarouselSlider';
-import Svg, { Image } from 'react-native-svg';
-import { windowHeight, windowWidth } from '../config/helper';
+import React, {useRef, useState} from 'react';
+import {View, SafeAreaView, PanResponder} from 'react-native';
+import {CloseButton} from '../common/CloseButton';
+import {styles} from './styles/ImageDetailScreenStyle';
+import {CarouselSlider} from '../common/CarouselSlider';
+import Svg, {Image} from 'react-native-svg';
+import {windowHeight, windowWidth} from '../config/helper';
 
 interface ImageDetailProps {
   navigation: any;
@@ -27,13 +27,13 @@ const ImageDetailScreen: React.FC<ImageDetailProps> = props => {
     onStartShouldSetPanResponder: () => true,
     onMoveShouldSetPanResponder: () => true,
     onPanResponderMove: (event, gesture) => {
-      const { dx, dy } = gesture;      
-        if((translateX + dx) <= 0 && (translateX + dx) >= -390 && scale > 1) {
-          if((translateY + dy) >= -500 && (translateY + dy) <= -380) {
-            setTranslateX(translateX + dx);
-            setTranslateY(translateY + dy);
-          }
+      const {dx, dy} = gesture;
+      if (translateX + dx <= 0 && translateX + dx >= -390 && scale > 1) {
+        if (translateY + dy >= -500 && translateY + dy <= -380) {
+          setTranslateX(translateX + dx);
+          setTranslateY(translateY + dy);
         }
+      }
     },
   });
 
@@ -55,9 +55,9 @@ const ImageDetailScreen: React.FC<ImageDetailProps> = props => {
 
   const transformStyle = {
     transform: [
-      { translateX: translateX },
-      { translateY: translateY },
-      { scale: scale },
+      {translateX: translateX},
+      {translateY: translateY},
+      {scale: scale},
     ],
   };
 
@@ -66,35 +66,36 @@ const ImageDetailScreen: React.FC<ImageDetailProps> = props => {
       <View style={styles.topContainer}>
         <CloseButton navigation={props?.navigation} />
       </View>
-        <View style={styles.container}>
-      <Svg
-        width={imageWidth}
-        height={imageHeight}
-        style={styles.svgContainer}
-        {...panResponder.panHandlers}
-      >
-        <Image
-          ref={imageRef}
+      <View style={styles.container}>
+        <Svg
           width={imageWidth}
           height={imageHeight}
-          href={props?.params?.data[props?.currentNewIndex]?.image}
-          onPress={handleDoubleTap}
-          style={transformStyle}
-        />
-      </Svg>
-    </View>
+          style={styles.svgContainer}
+          {...panResponder.panHandlers}>
+          <Image
+            ref={imageRef}
+            width={imageWidth}
+            height={imageHeight}
+            href={props?.params?.data[props?.currentNewIndex]?.image}
+            onPress={handleDoubleTap}
+            style={transformStyle}
+          />
+        </Svg>
+      </View>
       <View style={styles.bottomContainer}>
         <CarouselSlider
           data={props?.params?.data}
           setScale={setScale}
+          isImageDots={true}
           setTranslateX={setTranslateX}
           setTranslateY={setTranslateY}
           isImageDetail={true}
           setCurrentIndex={props?.setCurrentNewIndex}
-          currentIndex={props?.currentNewIndex} />
+          currentIndex={props?.currentNewIndex}
+        />
       </View>
     </SafeAreaView>
   );
 };
 
-export default ImageDetailScreen; 
+export default ImageDetailScreen;
