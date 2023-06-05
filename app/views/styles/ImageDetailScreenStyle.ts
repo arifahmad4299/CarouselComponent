@@ -4,7 +4,31 @@ import { windowHeight, windowWidth } from "../../config/helper";
 export const styles = StyleSheet.create({
     root: {
       flex: 1,
-      justifyContent: 'space-around'
+      justifyContent: 'space-around',
+      zIndex: 40,
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: windowHeight * 0.056,
+      // bottom: windowHeight * 0.067,
+      bottom: 0,
+      backgroundColor: 'white',
+    },
+    buttonContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: 12,
+      width: 75,
+      marginLeft: 15,
+      borderWidth: 1,
+      borderColor: 'grey',
+      backgroundColor: 'red',
+      borderRadius: 5,
+    },
+    closeText: {
+        fontWeight: '500',
+        fontSize: 16,
+        color: 'white'
     },
     closeIcon: {
       paddingRight: 10,

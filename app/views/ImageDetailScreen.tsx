@@ -1,11 +1,10 @@
 import React, {useRef, useState} from 'react';
-import {View, SafeAreaView, PanResponder} from 'react-native';
+import {View, SafeAreaView, PanResponder, Pressable, Text} from 'react-native';
 import {CloseButton} from '../common/CloseButton';
 import {styles} from './styles/ImageDetailScreenStyle';
 import {CarouselSlider} from '../common/CarouselSlider';
 import Svg, {Image} from 'react-native-svg';
 import {windowHeight, windowWidth} from '../config/helper';
-
 interface ImageDetailProps {
   navigation: any;
   route?: any;
@@ -13,13 +12,14 @@ interface ImageDetailProps {
   currentNewIndex?: any;
   setCurrentNewIndex?: any;
 }
-const ImageDetailScreen: React.FC<ImageDetailProps> = props => {
+const ImageDetailScreen = ({fullImage, currentIndex, data}: any) => {
   const imageWidth = windowWidth;
   const imageHeight = windowHeight;
 
   const [scale, setScale] = useState(1);
   const [translateX, setTranslateX] = useState(0);
   const [translateY, setTranslateY] = useState(0);
+  const [currentNewIndex, setCurrentNewIndex] = useState(currentIndex)
 
   const imageRef = useRef();
 
@@ -64,7 +64,9 @@ const ImageDetailScreen: React.FC<ImageDetailProps> = props => {
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.topContainer}>
-        <CloseButton navigation={props?.navigation} />
+      <Pressable style={styles.buttonContainer} onPress={() => fullImage()}>
+            <Text style={styles.closeText}>Close</Text>
+        </Pressable>
       </View>
       <View style={styles.container}>
         <Svg
@@ -76,7 +78,7 @@ const ImageDetailScreen: React.FC<ImageDetailProps> = props => {
             ref={imageRef}
             width={imageWidth}
             height={imageHeight}
-            href={props?.params?.data[props?.currentNewIndex]?.image}
+            href={data[currentNewIndex]?.image}
             onPress={handleDoubleTap}
             style={transformStyle}
           />
@@ -84,14 +86,14 @@ const ImageDetailScreen: React.FC<ImageDetailProps> = props => {
       </View>
       <View style={styles.bottomContainer}>
         <CarouselSlider
-          data={props?.params?.data}
+          data={data}
           setScale={setScale}
           isImageDots={true}
           setTranslateX={setTranslateX}
           setTranslateY={setTranslateY}
           isImageDetail={true}
-          setCurrentIndex={props?.setCurrentNewIndex}
-          currentIndex={props?.currentNewIndex}
+          setCurrentIndex={setCurrentNewIndex}
+          currentIndex={currentNewIndex}
         />
       </View>
     </SafeAreaView>

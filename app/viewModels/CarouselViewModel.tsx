@@ -10,18 +10,10 @@ const CarouselViewModel: React.FC<CarouselViewModelProps> = props => {
 
   const [carouselData, setCarouselData] = useState(data);
   const [currentIndex, setCurrentIndex] = useState(0);
-
- const handleVideoNavigation = (isFromYoutube: boolean, url: any) => {
-    if(isFromYoutube)
-      props.navigation.navigate('YoutubeDetailScreen', {url: url})
-    else
-      props.navigation.navigate('VideoDetailScreen', {url: url})
-  }
-
-  const handleImageNavigation = (data: any, currentIndex: any, image: any) => {
-    console.log(image, 'CAROUSEL:::')
-    props.navigation.navigate('ImageDetailScreen', {currentIndex: currentIndex, data: data, image: image})
-  }
+  const [isFullImage, setFullImage] = useState(false)
+  const [isVideoScreen, setVideoScreen] = useState(false)
+  const [isYouTubeScreen, setYoutubeScreen] = useState(false)
+  const [url, setUrl] = useState('')
 
   return( 
     <CarouselScreen 
@@ -30,8 +22,14 @@ const CarouselViewModel: React.FC<CarouselViewModelProps> = props => {
         carouselData: carouselData,
         currentIndex: currentIndex,
         setCurrentIndex: setCurrentIndex,
-        handleVideoNavigation: handleVideoNavigation,
-        handleImageNavigation: handleImageNavigation,
+        isFullImage: isFullImage,
+        setFullImage: setFullImage,
+        isVideoScreen: isVideoScreen,
+        setVideoScreen: setVideoScreen,
+        url: url,
+        setUrl: setUrl,
+        isYouTubeScreen: isYouTubeScreen,
+        setYoutubeScreen: setYoutubeScreen,
      }}
     />
   );
