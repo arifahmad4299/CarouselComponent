@@ -36,7 +36,7 @@ interface CarouselScreenProps {
 }
 
 const CarouselScreen = ({
-  dataf
+  data
 }: any) => {
   // const [carouselData, setCarouselData] = useState(data);
   const [currentIndex, setCurrentIndex] = useState(0);
