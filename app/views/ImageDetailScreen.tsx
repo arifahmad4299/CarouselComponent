@@ -1,17 +1,10 @@
 import React, {useRef, useState} from 'react';
 import {View, SafeAreaView, PanResponder, Pressable, Text} from 'react-native';
-import {CloseButton} from '../common/CloseButton';
 import {styles} from './styles/ImageDetailScreenStyle';
 import {CarouselSlider} from '../common/CarouselSlider';
 import Svg, {Image} from 'react-native-svg';
 import {windowHeight, windowWidth} from '../config/helper';
-interface ImageDetailProps {
-  navigation: any;
-  route?: any;
-  params?: any;
-  currentNewIndex?: any;
-  setCurrentNewIndex?: any;
-}
+
 const ImageDetailScreen = ({fullImage, currentIndex, data}: any) => {
   const imageWidth = windowWidth;
   const imageHeight = windowHeight;
@@ -78,7 +71,7 @@ const ImageDetailScreen = ({fullImage, currentIndex, data}: any) => {
             ref={imageRef}
             width={imageWidth}
             height={imageHeight}
-            href={data[currentNewIndex]?.image}
+            href={data[currentNewIndex]?.url}
             onPress={handleDoubleTap}
             style={transformStyle}
           />

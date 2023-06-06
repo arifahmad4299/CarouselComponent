@@ -1,51 +1,41 @@
-import {
-  Dimensions,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Image,
-  View,
-  Text,
-  Pressable,
-  TouchableOpacity,
-} from 'react-native';
+import {SafeAreaView, ScrollView, Image, View, Pressable} from 'react-native';
 import React, {useState} from 'react';
-import Glyphs from '../config/Glyphs';
-import {data} from '../config/mockData';
 import {windowWidth} from '../config/helper';
 import {CarouselSlider} from '../common/CarouselSlider';
 import {styles} from './styles/CarouselScreenStyle';
 import ImageDetailScreen from './ImageDetailScreen';
-import {CloseButton} from '../common/CloseButton';
 import VideoDetailScreen from './VideoDetailScreen';
 import YoutubeDetailScreen from './YoutubeDetailScreen';
+import {tempData} from '../config/tempMockData';
+import {MediaItem, MediaType} from '../config/MediaItemInterface';
+import Glyphs from '../config/Glyphs';
 
-interface CarouselScreenProps {
-  navigation: any;
-  carouselData?: any;
-  currentIndex?: any;
-  setCurrentIndex?: any;
-  isFullImage: any;
-  setFullImage: any;
-  isVideoScreen: boolean;
-  setVideoScreen: any;
-  url: string;
-  setUrl: any;
-  isYouTubeScreen: boolean,
-  setYoutubeScreen: any,
-}
 
-const CarouselScreen = ({
-  data
-}: any) => {
+const CarouselScreen = ({data}: any) => {
   // const [carouselData, setCarouselData] = useState(data);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isFullImage, setFullImage] = useState(false)
-  const [isVideoScreen, setVideoScreen] = useState(false)
-  const [isYouTubeScreen, setYoutubeScreen] = useState(false)
-  const [url, setUrl] = useState('')
+  const [isFullImage, setFullImage] = useState(false);
+  const [isVideoScreen, setVideoScreen] = useState(false);
+  const [isYouTubeScreen, setYoutubeScreen] = useState(false);
+  const [url, setUrl] = useState('');
 
-  
+  const finalData: MediaItem[] = data.map((url: string, index: number) => {
+    let type: MediaType;
+
+    if (url.endsWith('.mp4')) {
+      type = MediaType.Video;
+    } else if (url.includes('youtube.com') || url.includes('youtu.be')) {
+      type = MediaType.YouTube;
+    } else if (url.endsWith('.png' || '.jpeg' || '.jpg')) {
+      type = MediaType.Image;
+    } else {
+      type = MediaType.Image;
+    }
+
+    return {url, type, index};
+  });
+
+
   const fullImage = () => {
     return setFullImage(!isFullImage);
   };
@@ -54,9 +44,24 @@ const CarouselScreen = ({
     setVideoScreen(!isVideoScreen);
   };
 
-  const fullYoutubeVideo = () =>{
+  const fullYoutubeVideo = () => {
     setYoutubeScreen(!isYouTubeScreen);
-  }
+  };
+
+  const RenderCarouselImage = (type: string, url: string) => {
+    switch (type) {
+      case MediaType.LocalImage:
+        return <Image style={styles.image} source={Glyphs.YouTubeLogo} />;
+      case MediaType.YouTube:
+        return <Image style={styles.videoThumbnail} source={Glyphs.YouTubeLogo} />;
+      case MediaType.Image:
+        return <Image style={styles.image} source={{uri: url}} />;
+      case MediaType.Video:
+        return <Image style={styles.videoThumbnail} source={Glyphs.VideoIcon} />;
+      default:
+        return <Image style={styles.image} source={{uri: url}} />;
+    }
+  };
 
   return (
     <>
@@ -72,31 +77,28 @@ const CarouselScreen = ({
               const newIndex = Math.round(scrollOffset / windowWidth);
               setCurrentIndex(newIndex);
             }}>
-            {data?.map((item: any) =>
-                <Pressable onPress={() => {
-                  if(item?.videoUrl?.includes('youtu')) {
-                    setYoutubeScreen(true)
-                    setUrl(item?.videoUrl)
-                  }
-                  else if(item?.isVideo) {
-                    setVideoScreen(true)
-                    setUrl(item?.videoUrl ? item?.videoUrl : '')
-                  }
-                  else {
-                    setFullImage(true)
-                  }
+            {finalData?.map((item: any) => {
+              return (
+                <Pressable
+                  onPress={() => {
+                    if (item?.type === MediaType.YouTube) {
+                      setYoutubeScreen(true);
+                      setUrl(item?.url);
+                    } else if (item?.type === MediaType.Video) {
+                      setVideoScreen(true);
+                      setUrl(item?.url ? item?.url : '');
+                    } else {
+                      setFullImage(true);
+                    }
                   }}>
-                  <Image
-                    key={item?.index}
-                    source={{uri: item?.image}}
-                    style={styles.image}
-                  />
+                  {RenderCarouselImage(item?.type, item?.url)}
                 </Pressable>
-            )}
+              );
+            })}
           </ScrollView>
         </View>
         <CarouselSlider
-          data={data}
+          data={finalData}
           currentIndex={currentIndex}
           isImageDetail={false}
         />
@@ -105,12 +107,10 @@ const CarouselScreen = ({
         <ImageDetailScreen
           fullImage={fullImage}
           currentIndex={currentIndex}
-          data={data}
+          data={finalData}
         />
       )}
-      {isVideoScreen && (
-        <VideoDetailScreen fullVideo={fullVideo} url={url} />
-      )}
+      {isVideoScreen && <VideoDetailScreen fullVideo={fullVideo} url={url} />}
       {isYouTubeScreen && (
         <YoutubeDetailScreen fullYoutubeVideo={fullYoutubeVideo} url={url} />
       )}

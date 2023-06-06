@@ -10,6 +10,14 @@ export const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
     },
+    videoThumbnail: {
+      width: windowWidth - 30,
+      marginHorizontal: 15,
+      height: 300,
+      resizeMode: 'contain',
+      borderRadius: 10,
+      backgroundColor: 'lightgray'
+    },
     image: {
       width: windowWidth - 30,
       marginHorizontal: 15,

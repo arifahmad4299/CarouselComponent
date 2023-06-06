@@ -2,7 +2,7 @@ import React from 'react';
 import {Pressable, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import {styles} from './styles/ProductDetailScreenStyle';
 import CarouselScreen from './CarouselScreen';
-import { data } from '../config/mockData';
+import { tempData } from '../config/tempMockData';
 
 interface ProductDetailScreenProps {
   navigation: any;
@@ -12,7 +12,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = props => {
   return (
     <>
       <SafeAreaView>
-        <CarouselScreen data={data} />
+        <CarouselScreen data={tempData} />
         <View style={styles.detailsContainer}>
           <Text style={styles.title}>Bose Noise Cancelling 700 Bluetooth</Text>
           <Text style={styles.price}>$99.99</Text>

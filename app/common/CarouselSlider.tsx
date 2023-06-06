@@ -1,4 +1,4 @@
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {
   ActiveDot,
   ActiveImage,
@@ -7,6 +7,7 @@ import {
   InactiveImage,
   InactiveVideoIcon,
 } from './SliderIcons';
+import {MediaItem, MediaType} from '../config/MediaItemInterface';
 
 export const CarouselSlider = ({
   currentIndex,
@@ -19,19 +20,15 @@ export const CarouselSlider = ({
   isImageDots,
 }: any) => {
   return (
-    <View style={styles.main}>
-      {isImageDetail
-        ? data.map(
-            (
-              images: {image: any; isVideo: boolean},
-              index: React.Key | null | undefined,
-            ) =>
-              !images?.isVideo ? (
+      <View style={styles.main}>
+        {isImageDetail
+          ? data.map(({index, type, url}: any) => {
+              return type !== 'video' && type !== 'youtube' ? (
                 index === currentIndex ? (
-                  <ActiveImage data={images?.image} index={index} />
+                  <ActiveImage data={url} index={index} />
                 ) : (
                   <InactiveImage
-                    data={images?.image}
+                    data={url}
                     setCurrentIndex={setCurrentIndex}
                     index={index}
                     setScale={setScale}
@@ -39,14 +36,11 @@ export const CarouselSlider = ({
                     setTranslateY={setTranslateY}
                   />
                 )
-              ) : null,
-          )
-        : data.map(
-            (
-              images: {image: any; isVideo: boolean},
-              index: React.Key | null | undefined,
-            ) =>
-              !images?.isVideo ? (
+              ) : null;
+            })
+          : data.map(({index, type, url}: any) => {
+              return type !== 'video' &&
+                type !== 'youtube' ? (
                 index === currentIndex ? (
                   <ActiveDot />
                 ) : (
@@ -59,24 +53,14 @@ export const CarouselSlider = ({
                     setTranslateY={setTranslateY}
                   />
                 )
-              ) : null,
-          )}
-      {!isImageDetail &&
-        data.map(
-          (
-            images: {image: any; isVideo: boolean},
-            index: React.Key | null | undefined,
-          ) =>
-            images?.isVideo ? (
-              index === currentIndex ? (
+              ) : index === currentIndex ? (
                 <ActiveVideoIcon />
               ) : (
                 <InactiveVideoIcon />
-              )
-            ) : null,
-        )}
-      <View style={styles.paddingRight} />
-    </View>
+              );
+            })}
+             <View style={styles.paddingRight} />
+      </View>
   );
 };
 

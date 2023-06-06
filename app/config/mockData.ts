@@ -1,5 +1,3 @@
-import Glyphs from "./Glyphs";
-
 export const data = [
     {
       image: "https://www.visualeducation.com/wp-content/uploads/2020/05/Beats_headphones-2-1558px.jpg",
