@@ -34,6 +34,7 @@ export const InactiveImage = ({
   setScale,
   setTranslateX,
   setTranslateY,
+  dataType,
 }: any) => {
   return (
     <Pressable
@@ -43,13 +44,23 @@ export const InactiveImage = ({
         setTranslateY(0);
         setCurrentIndex(index);
       }}>
-      <Image key={index} source={{uri: data}} style={styles.inactiveImage} />
+      <Image
+        key={index}
+        source={dataType === 'local-image' ? data : {uri: data}}
+        style={styles.inactiveImage}
+      />
     </Pressable>
   );
 };
 
-export const ActiveImage = ({data, index}: any) => {
-  return <Image key={index} source={{uri: data}} style={styles.activeImage} />;
+export const ActiveImage = ({data, index, dataType}: any) => {
+  return (
+    <Image
+      key={index}
+      source={dataType === 'local-image' ? data : {uri: data}}
+      style={styles.activeImage}
+    />
+  );
 };
 
 export const ActiveVideoIcon = () => {

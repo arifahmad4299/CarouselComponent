@@ -18,6 +18,14 @@ export const styles = StyleSheet.create({
       borderRadius: 10,
       backgroundColor: 'lightgray'
     },
+    localImage: {
+      width: windowWidth - 30,
+      marginHorizontal: 15,
+      height: 300,
+      resizeMode: 'contain',
+      borderRadius: 10,
+      backgroundColor: 'lightgray'
+    },
     image: {
       width: windowWidth - 30,
       marginHorizontal: 15,

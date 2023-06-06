@@ -25,7 +25,7 @@ export const CarouselSlider = ({
           ? data.map(({index, type, url}: MediaItem) => {
               return type !== 'video' && type !== 'youtube' ? (
                 index === currentIndex ? (
-                  <ActiveImage data={url} index={index} />
+                  <ActiveImage data={url} index={index} dataType={type} />
                 ) : (
                   <InactiveImage
                     data={url}
@@ -34,6 +34,7 @@ export const CarouselSlider = ({
                     setScale={setScale}
                     setTranslateX={setTranslateX}
                     setTranslateY={setTranslateY}
+                    dataType={type}
                   />
                 )
               ) : null;

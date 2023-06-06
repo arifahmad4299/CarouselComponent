@@ -1,16 +1,23 @@
-import React, { useState } from 'react';
-import { Image, Pressable, SafeAreaView, ScrollView, View } from 'react-native';
-import { CarouselSlider } from '../common/CarouselSlider';
+import React, {useState} from 'react';
+import {Image, Pressable, SafeAreaView, ScrollView, View} from 'react-native';
+import {CarouselSlider} from '../common/CarouselSlider';
 import Glyphs from '../config/Glyphs';
-import { MediaItem, MediaType } from '../config/MediaItemInterface';
-import { windowWidth } from '../config/helper';
+import {MediaItem, MediaType} from '../config/MediaItemInterface';
+import {windowWidth} from '../config/helper';
 import ImageDetailScreen from './ImageDetailScreen';
 import VideoDetailScreen from './VideoDetailScreen';
 import YoutubeDetailScreen from './YoutubeDetailScreen';
-import { styles } from './styles/CarouselScreenStyle';
+import {styles} from './styles/CarouselScreenStyle';
 
+interface CarouselProps {
+  data: string[];
+  localImagesData?: string[];
+}
 
-const CarouselScreen = ({data}: any) => {
+const CarouselScreen = ({
+  data,
+  localImagesData,
+}: CarouselProps) => {
   // const [carouselData, setCarouselData] = useState(data);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFullImage, setFullImage] = useState(false);
@@ -18,7 +25,7 @@ const CarouselScreen = ({data}: any) => {
   const [isYouTubeScreen, setYoutubeScreen] = useState(false);
   const [url, setUrl] = useState('');
 
-  const finalData: MediaItem[] = data.map((url: string, index: number) => {
+  const serverData: MediaItem[] = data.map((url: string, index: number) => {
     let type: MediaType;
 
     if (url?.endsWith('.mp4')) {
@@ -34,7 +41,12 @@ const CarouselScreen = ({data}: any) => {
     return {url, type, index};
   });
 
-
+  const localData: MediaItem[] = localImagesData.map((url: string, index: number) => {
+    let type: MediaType;
+       type = MediaType.LocalImage;
+    return {url, type, index};
+  });
+  
   const fullImage = () => {
     return setFullImage(!isFullImage);
   };
@@ -52,15 +64,27 @@ const CarouselScreen = ({data}: any) => {
       case MediaType.LocalImage:
         return <Image style={styles.image} source={Glyphs.YouTubeLogo} />;
       case MediaType.YouTube:
-        return <Image style={styles.videoThumbnail} source={Glyphs.YouTubeLogo} />;
+        return (
+          <Image style={styles.videoThumbnail} source={Glyphs.YouTubeLogo} />
+        );
       case MediaType.Image:
         return <Image style={styles.image} source={{uri: url}} />;
       case MediaType.Video:
-        return <Image style={styles.videoThumbnail} source={Glyphs.VideoIcon} />;
+        return (
+          <Image style={styles.videoThumbnail} source={Glyphs.VideoIcon} />
+        );
       default:
         return <Image style={styles.image} source={{uri: url}} />;
     }
   };
+
+  const RenderLocalImages = (source: any) => {
+    console.log(source, '::');
+    
+    return (
+      <Image style={styles.localImage} source={source}/>
+    )
+  }
 
   return (
     <>
@@ -76,7 +100,14 @@ const CarouselScreen = ({data}: any) => {
               const newIndex = Math.round(scrollOffset / windowWidth);
               setCurrentIndex(newIndex);
             }}>
-            {finalData?.map(({index, type, url}: MediaItem) => {
+            {localData ? localData?.map(({index, type, url}: MediaItem) => {
+              return (
+                <Pressable
+                  onPress={() => { setFullImage(true) }}>
+                  {RenderLocalImages(url)}
+                </Pressable>
+              );
+            }) : serverData?.map(({index, type, url}: MediaItem) => {
               return (
                 <Pressable
                   key={index}
@@ -98,7 +129,7 @@ const CarouselScreen = ({data}: any) => {
           </ScrollView>
         </View>
         <CarouselSlider
-          data={finalData}
+          data={localData ? localData : serverData}
           currentIndex={currentIndex}
           isImageDetail={false}
         />
@@ -107,7 +138,7 @@ const CarouselScreen = ({data}: any) => {
         <ImageDetailScreen
           fullImage={fullImage}
           currentIndex={currentIndex}
-          data={finalData}
+          data={localData ? localData : serverData}
         />
       )}
       {isVideoScreen && <VideoDetailScreen fullVideo={fullVideo} url={url} />}

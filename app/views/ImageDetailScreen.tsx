@@ -4,7 +4,7 @@ import {styles} from './styles/ImageDetailScreenStyle';
 import {CarouselSlider} from '../common/CarouselSlider';
 import Svg, {Image} from 'react-native-svg';
 import {windowHeight, windowWidth} from '../config/helper';
-import { CloseButton } from '../common/CloseButton';
+import {CloseButton} from '../common/CloseButton';
 
 const ImageDetailScreen = ({fullImage, currentIndex, data}: any) => {
   const imageWidth = windowWidth;
@@ -13,7 +13,7 @@ const ImageDetailScreen = ({fullImage, currentIndex, data}: any) => {
   const [scale, setScale] = useState(1);
   const [translateX, setTranslateX] = useState(0);
   const [translateY, setTranslateY] = useState(0);
-  const [currentNewIndex, setCurrentNewIndex] = useState(currentIndex)
+  const [currentNewIndex, setCurrentNewIndex] = useState(currentIndex);
 
   const imageRef = useRef();
 
@@ -58,7 +58,7 @@ const ImageDetailScreen = ({fullImage, currentIndex, data}: any) => {
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.topContainer}>
-        <CloseButton onPress={() => fullImage()}/>
+        <CloseButton onPress={() => fullImage()} />
       </View>
       <View style={styles.container}>
         <Svg
@@ -70,7 +70,11 @@ const ImageDetailScreen = ({fullImage, currentIndex, data}: any) => {
             ref={imageRef}
             width={imageWidth}
             height={imageHeight}
-            href={data[currentNewIndex]?.url}
+            href={
+              data?.type === 'local-data'
+                ? data[currentNewIndex]
+                : data[currentNewIndex]?.url
+            }
             onPress={handleDoubleTap}
             style={transformStyle}
           />
