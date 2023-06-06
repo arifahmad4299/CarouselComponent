@@ -4,6 +4,7 @@ import {styles} from './styles/ImageDetailScreenStyle';
 import {CarouselSlider} from '../common/CarouselSlider';
 import Svg, {Image} from 'react-native-svg';
 import {windowHeight, windowWidth} from '../config/helper';
+import { CloseButton } from '../common/CloseButton';
 
 const ImageDetailScreen = ({fullImage, currentIndex, data}: any) => {
   const imageWidth = windowWidth;
@@ -57,9 +58,7 @@ const ImageDetailScreen = ({fullImage, currentIndex, data}: any) => {
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.topContainer}>
-      <Pressable style={styles.buttonContainer} onPress={() => fullImage()}>
-            <Text style={styles.closeText}>Close</Text>
-        </Pressable>
+        <CloseButton onPress={() => fullImage()}/>
       </View>
       <View style={styles.container}>
         <Svg

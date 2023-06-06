@@ -10,9 +10,7 @@ interface VideoDetailProps {
 const VideoDetailScreen = ({fullVideo, url}: any) => {
   return (
     <SafeAreaView style={styles.container}>
-      <Pressable style={styles.buttonContainer} onPress={() => fullVideo()}>
-        <Text style={styles.closeText}>Close</Text>
-      </Pressable>
+      <CloseButton onPress={() => fullVideo()} />
       <Video
         style={styles.backgroundVideo}
         source={{

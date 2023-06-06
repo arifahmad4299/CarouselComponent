@@ -1,6 +1,18 @@
-import { StyleSheet } from "react-native";
+import {StyleSheet} from 'react-native';
+import {windowHeight} from '../../config/helper';
 
 export const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    zIndex: 430,
+    backgroundColor: 'white',
+    justifyContent: 'space-between',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: windowHeight * 0.056,
+    bottom: 0,
+  },
   container: {
     flex: 1,
     alignItems: 'flex-start',
@@ -18,8 +30,8 @@ export const styles = StyleSheet.create({
     borderRadius: 5,
   },
   closeText: {
-      fontWeight: '500',
-      fontSize: 16,
-      color: 'white'
+    fontWeight: '500',
+    fontSize: 16,
+    color: 'white',
   },
 });

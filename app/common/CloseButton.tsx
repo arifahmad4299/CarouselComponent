@@ -1,9 +1,10 @@
-import { Pressable, StyleSheet, Text } from "react-native";
+import { Image, Pressable, StyleSheet, Text } from "react-native";
+import Glyphs from "../config/Glyphs";
 
-export const CloseButton = ({navigation}: any) => {
+export const CloseButton = ({onPress}: any) => {
     return (
-        <Pressable style={styles.buttonContainer} onPress={() => navigation.goBack()}>
-            <Text style={styles.closeText}>Close</Text>
+        <Pressable style={styles.buttonContainer} onPress={onPress}>
+            <Image style={styles.image} source={Glyphs.CloseIcon} />
         </Pressable>
     )
 }
@@ -13,16 +14,12 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       padding: 12,
-      width: 75,
+      width: 40,
+      height: 40,
       marginLeft: 15,
-      borderWidth: 1,
-      borderColor: 'grey',
-      backgroundColor: 'red',
-      borderRadius: 5,
     },
-    closeText: {
-        fontWeight: '500',
-        fontSize: 16,
-        color: 'white'
+    image: {
+       height: 30,
+       width: 30,
     }
   });
