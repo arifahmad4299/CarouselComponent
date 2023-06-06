@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Image, Pressable, SafeAreaView, ScrollView, View} from 'react-native';
+import {Image, Pressable, SafeAreaView, ScrollView, Text, TextStyle, View, ViewStyle} from 'react-native';
 import {CarouselSlider} from '../common/CarouselSlider';
 import Glyphs from '../config/Glyphs';
 import {MediaItem, MediaType} from '../config/MediaItemInterface';
@@ -11,12 +11,18 @@ import {styles} from './styles/CarouselScreenStyle';
 
 interface CarouselProps {
   data: string[];
-  localImagesData?: string[];
+  localImagesData?: any;
+  errorMessage?: string;
+  carouselContainerStyle?: ViewStyle;
+  errorMessageStyle?: TextStyle;
 }
 
 const CarouselScreen = ({
   data,
   localImagesData,
+  errorMessage = 'No image',
+  carouselContainerStyle,
+  errorMessageStyle,
 }: CarouselProps) => {
   // const [carouselData, setCarouselData] = useState(data);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -25,7 +31,7 @@ const CarouselScreen = ({
   const [isYouTubeScreen, setYoutubeScreen] = useState(false);
   const [url, setUrl] = useState('');
 
-  const serverData: MediaItem[] = data.map((url: string, index: number) => {
+  const serverData: MediaItem[] = data?.map((url: string, index: number) => {
     let type: MediaType;
 
     if (url?.endsWith('.mp4')) {
@@ -41,7 +47,7 @@ const CarouselScreen = ({
     return {url, type, index};
   });
 
-  const localData: MediaItem[] = localImagesData.map((url: string, index: number) => {
+  const localData: MediaItem[] = localImagesData?.map((url: string, index: number) => {
     let type: MediaType;
        type = MediaType.LocalImage;
     return {url, type, index};
@@ -61,30 +67,30 @@ const CarouselScreen = ({
 
   const RenderCarouselImage = (type: string, url: string) => {
     switch (type) {
-      case MediaType.LocalImage:
-        return <Image style={styles.image} source={Glyphs.YouTubeLogo} />;
       case MediaType.YouTube:
         return (
-          <Image style={styles.videoThumbnail} source={Glyphs.YouTubeLogo} />
+          <Image style={styles.containImage} source={Glyphs.YouTubeLogo} />
         );
       case MediaType.Image:
-        return <Image style={styles.image} source={{uri: url}} />;
+        return <Image style={styles.stretchImage} source={{uri: url}} />;
       case MediaType.Video:
         return (
-          <Image style={styles.videoThumbnail} source={Glyphs.VideoIcon} />
+          <Image style={styles.containImage} source={Glyphs.VideoIcon} />
         );
       default:
-        return <Image style={styles.image} source={{uri: url}} />;
+        return <NoImageView />;
     }
   };
 
   const RenderLocalImages = (source: any) => {
-    console.log(source, '::');
-    
     return (
-      <Image style={styles.localImage} source={source}/>
+      <Image style={styles.containImage} source={source}/>
     )
   }
+
+  const NoImageView = () => (
+    <View style={styles.noResultView} ><Text style={[styles.noResultText, errorMessageStyle]}>{errorMessage}</Text></View>
+  )
 
   return (
     <>
@@ -93,7 +99,7 @@ const CarouselScreen = ({
           <ScrollView
             horizontal
             pagingEnabled
-            style={styles.imageView}
+            style={[styles.imageView, carouselContainerStyle]}
             showsHorizontalScrollIndicator={false}
             onMomentumScrollEnd={event => {
               const scrollOffset = event.nativeEvent.contentOffset.x;

@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
     },
-    videoThumbnail: {
+    containImage: {
       width: windowWidth - 30,
       marginHorizontal: 15,
       height: 300,
@@ -18,15 +18,22 @@ export const styles = StyleSheet.create({
       borderRadius: 10,
       backgroundColor: 'lightgray'
     },
-    localImage: {
+    noResultView: {
+      justifyContent: 'center',
+      alignItems: 'center',
       width: windowWidth - 30,
       marginHorizontal: 15,
       height: 300,
-      resizeMode: 'contain',
       borderRadius: 10,
       backgroundColor: 'lightgray'
     },
-    image: {
+    noResultText: {
+      fontSize: 18,
+      fontWeight: '500',
+      textAlign: 'center',
+      textAlignVertical: 'center'
+    },
+    stretchImage: {
       width: windowWidth - 30,
       marginHorizontal: 15,
       height: 300,
@@ -44,12 +51,10 @@ export const styles = StyleSheet.create({
       },
       shadowRadius: 5,
       shadowOpacity: 0.1,
-      // resizeMode: 'contain',
       marginHorizontal: 15,
       backgroundColor: 'transparent',
     },
     detailsContainer: {
-      // flex: 1,
       margin: 15,
     },
     title: {

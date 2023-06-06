@@ -13,7 +13,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = props => {
   return (
     <>
       <SafeAreaView>
-        <CarouselScreen data={tempData} localImagesData={localImages} />
+        <CarouselScreen data={tempData} />
         <View style={styles.detailsContainer}>
           <Text style={styles.title}>Bose Noise Cancelling 700 Bluetooth</Text>
           <Text style={styles.price}>$99.99</Text>
