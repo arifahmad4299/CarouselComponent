@@ -1,4 +1,5 @@
-import {StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { MediaItem } from '../config/MediaItemInterface';
 import {
   ActiveDot,
   ActiveImage,
@@ -7,7 +8,6 @@ import {
   InactiveImage,
   InactiveVideoIcon,
 } from './SliderIcons';
-import {MediaItem, MediaType} from '../config/MediaItemInterface';
 
 export const CarouselSlider = ({
   currentIndex,
@@ -22,7 +22,7 @@ export const CarouselSlider = ({
   return (
       <View style={styles.main}>
         {isImageDetail
-          ? data.map(({index, type, url}: any) => {
+          ? data.map(({index, type, url}: MediaItem) => {
               return type !== 'video' && type !== 'youtube' ? (
                 index === currentIndex ? (
                   <ActiveImage data={url} index={index} />
@@ -38,7 +38,7 @@ export const CarouselSlider = ({
                 )
               ) : null;
             })
-          : data.map(({index, type, url}: any) => {
+          : data.map(({index, type, url}: MediaItem) => {
               return type !== 'video' &&
                 type !== 'youtube' ? (
                 index === currentIndex ? (

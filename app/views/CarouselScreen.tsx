@@ -1,14 +1,13 @@
-import {SafeAreaView, ScrollView, Image, View, Pressable} from 'react-native';
-import React, {useState} from 'react';
-import {windowWidth} from '../config/helper';
-import {CarouselSlider} from '../common/CarouselSlider';
-import {styles} from './styles/CarouselScreenStyle';
+import React, { useState } from 'react';
+import { Image, Pressable, SafeAreaView, ScrollView, View } from 'react-native';
+import { CarouselSlider } from '../common/CarouselSlider';
+import Glyphs from '../config/Glyphs';
+import { MediaItem, MediaType } from '../config/MediaItemInterface';
+import { windowWidth } from '../config/helper';
 import ImageDetailScreen from './ImageDetailScreen';
 import VideoDetailScreen from './VideoDetailScreen';
 import YoutubeDetailScreen from './YoutubeDetailScreen';
-import {tempData} from '../config/tempMockData';
-import {MediaItem, MediaType} from '../config/MediaItemInterface';
-import Glyphs from '../config/Glyphs';
+import { styles } from './styles/CarouselScreenStyle';
 
 
 const CarouselScreen = ({data}: any) => {
@@ -22,11 +21,11 @@ const CarouselScreen = ({data}: any) => {
   const finalData: MediaItem[] = data.map((url: string, index: number) => {
     let type: MediaType;
 
-    if (url.endsWith('.mp4')) {
+    if (url?.endsWith('.mp4')) {
       type = MediaType.Video;
-    } else if (url.includes('youtube.com') || url.includes('youtu.be')) {
+    } else if (url?.includes('youtube.com') || url?.includes('youtu.be')) {
       type = MediaType.YouTube;
-    } else if (url.endsWith('.png' || '.jpeg' || '.jpg')) {
+    } else if (url?.endsWith('.png' || '.jpeg' || '.jpg')) {
       type = MediaType.Image;
     } else {
       type = MediaType.Image;
@@ -77,21 +76,22 @@ const CarouselScreen = ({data}: any) => {
               const newIndex = Math.round(scrollOffset / windowWidth);
               setCurrentIndex(newIndex);
             }}>
-            {finalData?.map((item: any) => {
+            {finalData?.map(({index, type, url}: MediaItem) => {
               return (
                 <Pressable
+                  key={index}
                   onPress={() => {
-                    if (item?.type === MediaType.YouTube) {
+                    if (type === MediaType.YouTube) {
                       setYoutubeScreen(true);
-                      setUrl(item?.url);
-                    } else if (item?.type === MediaType.Video) {
+                      setUrl(url);
+                    } else if (type === MediaType.Video) {
                       setVideoScreen(true);
-                      setUrl(item?.url ? item?.url : '');
+                      setUrl(url ? url : '');
                     } else {
                       setFullImage(true);
                     }
                   }}>
-                  {RenderCarouselImage(item?.type, item?.url)}
+                  {RenderCarouselImage(type, url)}
                 </Pressable>
               );
             })}
