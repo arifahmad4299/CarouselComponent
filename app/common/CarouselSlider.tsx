@@ -39,7 +39,7 @@ export const CarouselSlider = ({
                 )
               ) : null;
             })
-          : data.map(({index, type, url}: MediaItem) => {
+          : data?.map(({index, type, url}: MediaItem) => {
               return type !== 'video' &&
                 type !== 'youtube' ? (
                 index === currentIndex ? (

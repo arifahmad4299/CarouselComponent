@@ -1,5 +1,17 @@
 import React, {useState} from 'react';
-import {Image, Pressable, SafeAreaView, ScrollView, Text, TextStyle, View, ViewStyle} from 'react-native';
+import {
+  Alert,
+  Image,
+  ImageResizeMode,
+  ImageStyle,
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TextStyle,
+  View,
+  ViewStyle,
+} from 'react-native';
 import {CarouselSlider} from '../common/CarouselSlider';
 import Glyphs from '../config/Glyphs';
 import {MediaItem, MediaType} from '../config/MediaItemInterface';
@@ -10,21 +22,27 @@ import YoutubeDetailScreen from './YoutubeDetailScreen';
 import {styles} from './styles/CarouselScreenStyle';
 
 interface CarouselProps {
-  data: string[];
+  data?: any;
   localImagesData?: any;
   errorMessage?: string;
   carouselContainerStyle?: ViewStyle;
-  errorMessageStyle?: TextStyle;
+  customImageStyle?: ImageStyle;
+  textStyle?: TextStyle;
+  styledView?: boolean;
+  resizeMode?: ImageResizeMode;
+  watchVideoText?: string;
 }
 
 const CarouselScreen = ({
   data,
   localImagesData,
   errorMessage = 'No image',
-  carouselContainerStyle,
-  errorMessageStyle,
+  customImageStyle,
+  textStyle,
+  styledView,
+  resizeMode,
+  watchVideoText = 'Click to watch video',
 }: CarouselProps) => {
-  // const [carouselData, setCarouselData] = useState(data);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFullImage, setFullImage] = useState(false);
   const [isVideoScreen, setVideoScreen] = useState(false);
@@ -43,16 +61,17 @@ const CarouselScreen = ({
     } else {
       type = MediaType.Image;
     }
-
     return {url, type, index};
   });
 
-  const localData: MediaItem[] = localImagesData?.map((url: string, index: number) => {
-    let type: MediaType;
-       type = MediaType.LocalImage;
-    return {url, type, index};
-  });
-  
+  const localData: MediaItem[] = localImagesData?.map(
+    (url: string, index: number) => {
+      let type: MediaType;
+      type = MediaType.LocalImage;
+      return {url, type, index};
+    },
+  );
+
   const fullImage = () => {
     return setFullImage(!isFullImage);
   };
@@ -69,13 +88,40 @@ const CarouselScreen = ({
     switch (type) {
       case MediaType.YouTube:
         return (
-          <Image style={styles.containImage} source={Glyphs.YouTubeLogo} />
+          <Image
+            style={[
+              styledView ? styles.styledImage : styles.fullScreenImage,
+              customImageStyle,
+              {resizeMode: 'cover'},
+            ]}
+            source={Glyphs.YouTubeLogo}
+          />
         );
       case MediaType.Image:
-        return <Image style={styles.stretchImage} source={{uri: url}} />;
+        return (
+          <Image
+            style={[
+              styledView ? styles.styledImage : styles.fullScreenImage,
+              customImageStyle,
+              {resizeMode: resizeMode},
+            ]}
+            source={{uri: url}}
+          />
+        );
       case MediaType.Video:
         return (
-          <Image style={styles.containImage} source={Glyphs.VideoIcon} />
+          <View>
+            <Text style={[styles.watchVideoText, textStyle]}>
+              {watchVideoText}
+            </Text>
+            <Image
+              style={[
+                styledView ? styles.styledImage : styles.fullScreenImage,
+                {resizeMode: 'cover'},
+              ]}
+              source={Glyphs.VideoIcon}
+            />
+          </View>
         );
       default:
         return <NoImageView />;
@@ -83,14 +129,24 @@ const CarouselScreen = ({
   };
 
   const RenderLocalImages = (source: any) => {
-    return (
-      <Image style={styles.containImage} source={source}/>
-    )
-  }
+    return <Image style={styles.styledImage} source={source} />;
+  };
 
   const NoImageView = () => (
-    <View style={styles.noResultView} ><Text style={[styles.noResultText, errorMessageStyle]}>{errorMessage}</Text></View>
-  )
+    <View style={styles.noResultView}>
+      <Text style={[styles.noResultText, textStyle]}>{errorMessage}</Text>
+    </View>
+  );
+
+  if (!data && !localImagesData) {
+    return (
+      <>
+        {Alert.alert(
+          `Error!\n Please pass the data to show Carousel component`,
+        )}
+      </>
+    );
+  }
 
   return (
     <>
@@ -99,39 +155,43 @@ const CarouselScreen = ({
           <ScrollView
             horizontal
             pagingEnabled
-            style={[styles.imageView, carouselContainerStyle]}
+            style={styles.imageView}
             showsHorizontalScrollIndicator={false}
             onMomentumScrollEnd={event => {
               const scrollOffset = event.nativeEvent.contentOffset.x;
               const newIndex = Math.round(scrollOffset / windowWidth);
               setCurrentIndex(newIndex);
             }}>
-            {localData ? localData?.map(({index, type, url}: MediaItem) => {
-              return (
-                <Pressable
-                  onPress={() => { setFullImage(true) }}>
-                  {RenderLocalImages(url)}
-                </Pressable>
-              );
-            }) : serverData?.map(({index, type, url}: MediaItem) => {
-              return (
-                <Pressable
-                  key={index}
-                  onPress={() => {
-                    if (type === MediaType.YouTube) {
-                      setYoutubeScreen(true);
-                      setUrl(url);
-                    } else if (type === MediaType.Video) {
-                      setVideoScreen(true);
-                      setUrl(url ? url : '');
-                    } else {
-                      setFullImage(true);
-                    }
-                  }}>
-                  {RenderCarouselImage(type, url)}
-                </Pressable>
-              );
-            })}
+            {localData
+              ? localData?.map(({index, type, url}: MediaItem) => {
+                  return (
+                    <Pressable
+                      onPress={() => {
+                        setFullImage(true);
+                      }}>
+                      {RenderLocalImages(url)}
+                    </Pressable>
+                  );
+                })
+              : serverData?.map(({index, type, url}: MediaItem) => {
+                  return (
+                    <Pressable
+                      key={index}
+                      onPress={() => {
+                        if (type === MediaType.YouTube) {
+                          setYoutubeScreen(true);
+                          setUrl(url);
+                        } else if (type === MediaType.Video) {
+                          setVideoScreen(true);
+                          setUrl(url ? url : '');
+                        } else {
+                          setFullImage(true);
+                        }
+                      }}>
+                      {RenderCarouselImage(type, url)}
+                    </Pressable>
+                  );
+                })}
           </ScrollView>
         </View>
         <CarouselSlider

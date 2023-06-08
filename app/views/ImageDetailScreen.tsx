@@ -58,7 +58,7 @@ const ImageDetailScreen = ({fullImage, currentIndex, data}: any) => {
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.topContainer}>
-        <CloseButton onPress={() => fullImage()} />
+        <CloseButton onPress={() => fullImage()}/>
       </View>
       <View style={styles.container}>
         <Svg
@@ -70,11 +70,7 @@ const ImageDetailScreen = ({fullImage, currentIndex, data}: any) => {
             ref={imageRef}
             width={imageWidth}
             height={imageHeight}
-            href={
-              data?.type === 'local-data'
-                ? data[currentNewIndex]
-                : data[currentNewIndex]?.url
-            }
+            href={data?.type === 'local-data'? data[currentNewIndex] : data[currentNewIndex]?.url}
             onPress={handleDoubleTap}
             style={transformStyle}
           />

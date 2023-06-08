@@ -13,7 +13,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = props => {
   return (
     <>
       <SafeAreaView>
-        <CarouselScreen data={tempData} />
+        <CarouselScreen data={tempData} styledView />
         <View style={styles.detailsContainer}>
           <Text style={styles.title}>Bose Noise Cancelling 700 Bluetooth</Text>
           <Text style={styles.price}>$99.99</Text>
@@ -22,8 +22,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = props => {
             {`Keep your phone in your pocket and your head up to the world with easy access to voice assistants for music, navigation, weather and more confidently take a call or speak to Alexa in any environment.\nA with an unrivalled adaptive four-microphone system that isolates your voice from surrounding noise.\nOptimized for Amazon Alexa and the Google Assistant. \n`}
           </Text>
           <Pressable
-            style={styles.addButton}
-            onPress={() => props.navigation.navigate('CarouselScreen')}>
+            style={styles.addButton}>
             <Text style={styles.addButtonLabel}>Add to Cart</Text>
           </Pressable>
         </View>
